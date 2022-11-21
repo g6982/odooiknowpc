@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<templates>
+
+  <t t-name="sh_inventory_adjustment_barcode_mobile.stock_adjustment.tree.scan_feature" t-inherit="web.ListRenderer" t-inherit-mode="extension" owl="1">
+
+    <xpath expr="//div[hasclass('o_list_renderer')]" position="before">
+
+      <div
+        t-if="sh_inventory_adjustment_barcode_scanner_js_class == 'inventory_report_list' "
+        class="row js_cls_sh_barcode_scanner_scanning_wrapper" style="align-items: center; padding: 10px 16px;">
+        <div class="col-md-4" t-if="sh_barcode_scanner_user_has_stock_multi_locations">
+          <div class="form-group mb-0">
+            <select
+              t-on-change="_on_change_sh_barcode_scanner_location_select"
+              class="form-control js_cls_sh_barcode_scanner_location_select">
+              <t t-if="sh_barcode_scanner_locations" t-foreach="sh_barcode_scanner_locations" t-as="dic_location" t-key="dic_location.id">
+                <option t-att-value="dic_location.id" t-att-selected="dic_location.id == sh_barcode_scanner_location_selected and 'selected' or None">
+                  <span t-esc="dic_location.display_name" />
+                </option>
+              </t>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <input type="text"
+            t-on-change="_on_change_sh_barcode_scanner_stock_quant_tree_input_barcode"
+            autofocus="autofocus"
+            class="form-control js_cls_sh_barcode_scanner_stock_quant_tree_input_barcode" placeholder="barcode" />
+        </div>
+        <div class="col-md-4" t-if="sh_barcode_scanner_user_is_stock_manager" style="display: flex; justify-content: flex-start; align-items: center;">
+          <div style="margin-right: 10px;display: flex;align-items: center;">
+            <input
+              t-on-change.stop="on_change_scan_negative_stock_cls"
+              type="checkbox"
+              t-att-value="scan_negative_stock_value"
+              class="scan_negative_stock_cls"
+              name="scan_negative_stock"
+              style="height: 15px; width: 15px;"
+              t-att-checked="sh_scan_negative_stock == 'true' ? true : undefined"
+            />
+          </div>
+          <div style="margin-right: 50px;">
+            <label for="scan_negative_stock"> Negative Counted Quantity?</label>
+          </div>
+
+          <div>
+            <button
+              class="btn btn-primary"
+              t-on-click.stop.prevent="_on_click_js_cls_sh_barcode_scanner_stock_quant_tree_btn_apply">
+              <i class="fa fa-fw o_button_icon fa-save"></i>
+              <span>Apply</span>
+
+            </button>
+
+          </div>
+        </div>
+
+        <div class="js_cls_alert_msg col-12 d-none"></div>
+      </div>
+
+
+      <section style='padding: 0 16px;' t-if="sh_inventory_adjustment_barcode_scanner_js_class == 'inventory_report_list' ">
+        <div>
+          <!-- <a role="button" class="btn btn-primary"></a> -->
+
+          <button
+            id="js_id_sh_inventory_adjt_barcode_mobile_start_btn"
+            style="color: #fff; border-radius: 0px; margin-bottom: 5px; margin-right: 5px;"
+            class="btn btn-primary"
+            t-on-click.stop.prevent="_on_click_sh_inventory_adjt_barcode_mobile_start_btn">
+            <i class="fa fa-barcode"></i>
+            Start
+          </button>
+
+
+          <button role="button"
+            style="display: none; color: #fff; border-radius: 0px; margin-bottom: 5px; margin-right: 5px;"
+            class="btn btn-danger"
+            id="js_id_sh_inventory_adjt_barcode_mobile_reset_btn"
+            t-on-click.stop.prevent="_on_click_sh_inventory_adjt_barcode_mobile_reset_btn">
+            <i class="fa fa-barcode"></i>
+            Stop
+          </button>
+        </div>
+
+
+        <div id="js_id_sh_inventory_adjt_barcode_mobile_vid_div" style="display: none;">
+          
+          
+          <div class="row" style="align-items: center; margin: 1.6rem 0;">
+            <div class="col-lg-1 col-md-1 col-sm-2 col-2" style="padding: 0;">
+                <strong style="align-self: center;" class="col-3">Camera</strong>
+            </div>
+            <div class="col-lg-11 col-md-11 col-sm-10 col-10" style="padding: 0;">
+              <select class="col-8 form-control"
+              t-on-change.stop="_on_change_sh_inventory_adjt_barcode_mobile_cam_select"
+              id="js_id_sh_inventory_adjt_barcode_mobile_cam_select">
+              <t t-if="list_cam" t-foreach="list_cam" t-as="dic_cam" t-key="dic_cam.device_id">
+                <option t-att-value="dic_cam.device_id" t-att-selected="dic_cam.device_id == selected_device_id and 'selected' or None">
+                  <span t-esc="dic_cam.label" />
+                </option>
+              </t>
+
+
+            </select>
+            </div>
+        </div>
+          
+          
+          <video id="js_id_sh_inventory_adjt_barcode_mobile_video" class="cls_sh_all_in_one_mbs_video_tag" style="border: 1px solid gray;"></video>
+
+          <span style="display: block;">Result:</span>
+          <code id="js_id_sh_inventory_adjt_barcode_mobile_result"></code>
+        </div>
+      </section>
+
+
+    </xpath>
+  </t>
+
+
+</templates>
